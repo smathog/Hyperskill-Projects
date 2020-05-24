@@ -1,0 +1,1 @@
+The stage specification can be found [here](https://hyperskill.org/projects/46/stages/250/implement)
