@@ -1,0 +1,1 @@
+The project specification can be found [here](https://hyperskill.org/projects/41?goal=7)
