@@ -1,4 +1,4 @@
-The stage specification can be found [here](https://hyperskill.org/projects/53/stages/287/implement). The text below is taket from this page:
+The stage specification can be found [here](https://hyperskill.org/projects/53/stages/287/implement) on Hyperskill. The text below is taken from this page.
 
 # Description
 
@@ -19,3 +19,7 @@ In this stage, your program should:
 1. Print a predefined game log that contains at least two turns.
 2. The output to be graded is a 4-digit code consisting of unique digits.
 3. The last line of your output contains a secret number.
+
+# Notes
+
+For this stage, all the implementation required was simply providing a printout of a mock game. 
