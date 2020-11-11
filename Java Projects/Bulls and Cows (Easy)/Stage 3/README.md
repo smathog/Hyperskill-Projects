@@ -16,4 +16,4 @@ In this stage, your program should generate a pseudo-random number of a given le
 
 # Notes
 
-The repeated usage of Math.abs is necessary due to the fact that System.nanoTime() can return a negative number, as well because casting from long to int can also return a negative number. 
+The repeated usage of Math.abs is necessary due to the fact that System.nanoTime() can return a negative number, as well as because casting from long to int can also return a negative number. 
