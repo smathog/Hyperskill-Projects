@@ -2,7 +2,7 @@ package advisor;
 
 public class Settings {
     private static boolean access = false;
-    private static String clientID = "f030e1f80d4c4a6aa5e967b371431971";
+    private static String clientID = "RANDOM_STRING_THE_FIRST";
 
     public static void setAccess() {
         access = !access;
