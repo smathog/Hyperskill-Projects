@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Latest</title>
+    <style>
+        #load_date {
+            color:green;
+        }
+        #code_snippet {
+            background-size: contain;
+            background-color: LightGrey;
+        }
+    </style>
+    <link rel="stylesheet"
+          target="_blank" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <#list list as snippet>
+        <span id="load_date">${snippet.date}</span>
+        <pre id="code_snippet"><code>${snippet.code}</code></pre>
+        <br>
+    </#list>
+</body>
+</html>
