@@ -22,6 +22,6 @@ public class XMLContentString extends XMLContent {
 
     @Override
     public String toString() {
-        return "\"" + contentString + "\"";
+        return contentString;
     }
 }

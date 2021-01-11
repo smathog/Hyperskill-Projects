@@ -19,7 +19,10 @@ public class JSONString implements JSONComponent{
 
     @Override
     public String JSONRepresentation() {
-        return '"' + str + '"';
+        if (str == null)
+            return null;
+        else
+            return '"' + str + '"';
     }
 
     @Override

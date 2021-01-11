@@ -1,5 +1,6 @@
 package converter.ElementModel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -55,5 +56,38 @@ public class ElementModel {
 
     public LinkedHashMap<String, String> getAttributes() {
         return attributes;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("$");
+        sb.append("Element: ");
+        sb.append(element);
+        sb.append(" Attributes: ");
+        if (hasAttributes())
+            for (var entry : attributes.entrySet()) {
+                sb.append(entry.getKey());
+                sb.append(":");
+                sb.append(entry.getValue());
+                sb.append(" ");
+            }
+        else
+            sb.append("none ");
+        if (containsElements()) {
+            sb.append("Nested Elements: ");
+            sb.append("\n");
+            for (var elem : nested) {
+                sb.append(elem.toString());
+                sb.append("\n");
+            }
+        } else {
+            sb.append("Value: ");
+            sb.append(value);
+            sb.append(" ");
+        }
+        sb.append(element);
+        sb.append("$");
+        return sb.toString();
     }
 }

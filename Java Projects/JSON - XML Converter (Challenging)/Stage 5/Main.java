@@ -1,5 +1,7 @@
 package converter;
 
+import converter.ElementModel.ConverterUtilities;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +11,7 @@ public class Main {
         try {
             var filePath = Paths.get("test.txt");
             String fileContents = Files.readString(filePath);
-           // expandJSON(fileContents);
+            ConverterUtilities.convert(fileContents);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
