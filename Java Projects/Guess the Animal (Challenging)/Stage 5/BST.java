@@ -43,7 +43,7 @@ public class BST {
         if (root.isAnimal())
             System.out.printf(format, "- root node", ((AnimalNode) root).getValue());
         else
-            System.out.printf(format, "- root node", ((QuestionNode) root).getValue());
+            System.out.printf(format, "- root node", ((QuestionNode) root).getPositiveStatement());
         int numNodes = getNumNodes(root);
         System.out.printf(format, "- total number of nodes", numNodes);
         System.out.printf(format, "- total number of animals", animalSet.size());
@@ -80,13 +80,15 @@ public class BST {
     private double getAverageDepth(Node start) {
         ArrayList<Integer> depths = new ArrayList<>();
         loadDepthList(root, depths, 0);
+        System.out.println(this);
         return depths.stream().mapToDouble(i -> i).average().getAsDouble();
     }
 
     private void loadDepthList(Node start, ArrayList<Integer> depths, int currentDepth) {
-        depths.add(currentDepth);
-        ++currentDepth;
-        if (start.isQuestion()) {
+        if (start.isAnimal())
+            depths.add(currentDepth);
+        else {
+            ++currentDepth;
             QuestionNode q = (QuestionNode) start;
             loadDepthList(q.yesNode, depths, currentDepth);
             loadDepthList(q.noNode, depths, currentDepth);
@@ -119,6 +121,7 @@ public class BST {
     public ArrayList<String> listFacts(Animal target) {
         ArrayList<String> facts = new ArrayList<>();
         listFactsImpl(facts, root, target);
+        Collections.reverse(facts);
         return facts;
     }
 
@@ -237,7 +240,7 @@ public class BST {
             if (node == root) {
                 nextCall.accept("");
             } else if (node.isQuestion()) {
-                int length = pointer.length() + ((QuestionNode) node).getValue().length();
+                int length = pointer.length() /*+ ((QuestionNode) node).getValue().length()*/;
                 StringBuilder pb = new StringBuilder(padding);
                 if (nodeAfter)
                     pb.append("|" + " ".repeat(length));
