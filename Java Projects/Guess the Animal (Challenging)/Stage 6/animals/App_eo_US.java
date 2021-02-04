@@ -1,3 +1,5 @@
+package animals;
+
 import animals.Animal;
 
 import java.text.MessageFormat;

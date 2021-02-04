@@ -237,7 +237,7 @@ public class Main {
     }
 
     public static class Wrapper {
-        protected final ResourceBundle appResource = ResourceBundle.getBundle("App");
+        protected final ResourceBundle appResource = ResourceBundle.getBundle("animals.App");
         protected final String fileName = appResource.getString("fileName");
         protected final ArrayList<String> clarificationList = Arrays.stream(appResource.getStringArray("ask.again"))
                 .collect(Collectors.toCollection(ArrayList::new));
