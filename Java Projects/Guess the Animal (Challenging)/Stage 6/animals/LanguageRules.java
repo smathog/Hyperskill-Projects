@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LanguageRules {
-    private static ResourceBundle appResource = ResourceBundle.getBundle("App");
+    private static ResourceBundle appResource = Main.getAppResource();
 
     public static Optional<Boolean> validateAnswer(String answer) {
         Pattern positive = Pattern.compile(appResource.getString("positiveAnswer.isCorrect"), Pattern.CASE_INSENSITIVE);

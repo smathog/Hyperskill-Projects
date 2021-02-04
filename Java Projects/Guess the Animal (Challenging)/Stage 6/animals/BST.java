@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BST {
-    private static final ResourceBundle appResource = ResourceBundle.getBundle("App");
+    private static final ResourceBundle appResource = Main.getAppResource();
     private static final Comparator<Animal> animalComparator = Comparator.comparing(Animal::getName);
 
     private Node root;
@@ -163,6 +163,7 @@ public class BST {
             objectMapper
                     .writerWithDefaultPrettyPrinter()
                     .writeValue(new File("list" + fileName), animalSet.toArray(new Animal[]{}));
+            System.out.println("Saved to: " + fileName);
         } catch (Exception e) {
             System.out.println("ERROR WRITING BST TO JSON WITH FILENAME " + fileName);
             System.out.println(e.getMessage());

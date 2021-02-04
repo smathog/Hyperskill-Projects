@@ -24,7 +24,6 @@ public class Main {
     private static final Random r = new Random();
 
     public static void main(String[] args) {
-        System.out.println("IN MAIN");
         BST.FileType fileType;
         if (args.length != 2)
             fileType = BST.FileType.JSON;
@@ -35,7 +34,6 @@ public class Main {
                     break;
                 case "yaml":
                     fileType = BST.FileType.YAML;
-                    System.out.println("HERE");
                     break;
                 case "json":
                 default:
@@ -44,7 +42,7 @@ public class Main {
             }
         }
 
-        greet();
+        //greet();
         Scanner scanner = new Scanner(System.in);
 
         BST bst;
@@ -52,10 +50,10 @@ public class Main {
             bst = new BST();
             bst.loadTree(fileName + fileType.name().toLowerCase(), fileType);
         } catch (IOException e) {
-            System.out.println("EXCEPTION: " + e.getMessage());
-            System.out.println();
-            printToUpper(appResource.getString("animal.wantLearn"));
-            printToUpper(appResource.getString("animal.askFavorite"));
+            //System.out.println("EXCEPTION: " + e.getMessage());
+            //System.out.println();
+            System.out.println(appResource.getString("animal.wantLearn"));
+            System.out.println(appResource.getString("animal.askFavorite"));
             Animal favorite = LanguageRules.getAnimal(scanner);
             bst = new BST(favorite);
         }
@@ -238,5 +236,9 @@ public class Main {
 
     public static void printToUpper(String str) {
         System.out.println(Character.toUpperCase(str.charAt(0)) + str.substring(1));
+    }
+
+    public static ResourceBundle getAppResource() {
+        return appResource;
     }
 }

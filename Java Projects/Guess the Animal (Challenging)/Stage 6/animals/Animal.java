@@ -7,11 +7,10 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@JsonSerialize
 public class Animal {
     private String name;
 
-    private static ResourceBundle appResource = ResourceBundle.getBundle("App");
+    private static ResourceBundle appResource = Main.getAppResource();
 
     public Animal() {}
 
@@ -27,6 +26,7 @@ public class Animal {
         this.name = name;
     }
 
+    @JsonIgnore
     public String getNameWithoutArticle() {
         return name.replaceAll(appResource.getString("animalName.1.pattern"), appResource.getString("animalName.1.replace"));
     }
