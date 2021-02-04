@@ -1,10 +1,12 @@
 package animals;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -170,11 +172,9 @@ public class Main {
             String positiveStatement = input.replaceAll(w.appResource.getString("statement.1.pattern"), w.appResource.getString("statement.1.replace"));
             String negativeStatement;
             if (input.matches(w.appResource.getString("question.1.pattern"))) {
-                System.out.println("MATCHED question.1.pattern");
                 question = input.replaceAll(w.appResource.getString("question.1.pattern"), w.appResource.getString("question.1.replace"));
                 negativeStatement = input.replaceAll(w.appResource.getString("negative.1.pattern"), w.appResource.getString("negative.1.replace"));
             } else if (input.matches(w.appResource.getString("question.2.pattern"))) {
-                System.out.println("MATCHED question.2.pattern");
                 question = input.replaceAll(w.appResource.getString("question.2.pattern"), w.appResource.getString("question.2.replace"));
                 if (input.matches(w.appResource.getString("negative.2.pattern")))
                     negativeStatement = input.replaceAll(w.appResource.getString("negative.2.pattern"), w.appResource.getString("negative.2.replace"));
@@ -237,7 +237,7 @@ public class Main {
     }
 
     public static class Wrapper {
-        protected final ResourceBundle appResource = ResourceBundle.getBundle("animals.App");
+        protected final ResourceBundle appResource = getBundle();
         protected final String fileName = appResource.getString("fileName");
         protected final ArrayList<String> clarificationList = Arrays.stream(appResource.getStringArray("ask.again"))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -255,5 +255,155 @@ public class Main {
 
         private Wrapper() {
         };
+
+        //Not an ideal way of handling this...but I found it was the only way for the tests
+        //To correctly get the right resource bundle, as opposed to using an exterior Java
+        //class as a resource bundle (worked correctly on my computer but the tests couldn't
+        //find the bundles when implemented that way!
+        private ResourceBundle getBundle() {
+            ResourceBundle messagesBundle = ResourceBundle.getBundle("messages");
+            ResourceBundle patternsBundle = ResourceBundle.getBundle("patterns");
+            if (messagesBundle.getString("fileName").equalsIgnoreCase("animals."))
+                return new ListResourceBundle() {
+                    private List<Object[]> messagesList() {
+                        return Arrays.asList(
+                                new Object[][]{
+                                        {"fileName", messagesBundle.getString("fileName")},
+                                        {"welcome", messagesBundle.getString("welcome")},
+                                        {"greeting.morning", messagesBundle.getString("greeting.morning")},
+                                        {"greeting.afternoon", messagesBundle.getString("greeting.afternoon")},
+                                        {"greeting.evening", messagesBundle.getString("greeting.evening")},
+                                        {"farewell", messagesBundle.getString("farewell").split("\\f")},
+                                        {"ask.again", messagesBundle.getString("ask.again").split("\\f")},
+                                        {"animal.wantLearn", messagesBundle.getString("animal.wantLearn")},
+                                        {"animal.askFavorite", messagesBundle.getString("animal.askFavorite")},
+                                        {"animal.nice", messagesBundle.getString("animal.nice").split("\\f")},
+                                        {"animal.prompt", messagesBundle.getString("animal.prompt")},
+                                        {"animal.error", messagesBundle.getString("animal.error")},
+                                        {"statement.prompt", (BiFunction<Animal, Animal, String>) (a1, a2) -> MessageFormat.format(messagesBundle.getString("statement.prompt"),
+                                                a1.getName(),
+                                                a2.getName())},
+                                        {"statement.error", messagesBundle.getString("statement.error")},
+                                        {"game.entry", (Runnable) () -> {
+                                            System.out.println(messagesBundle.getString("game.letsPlay"));
+                                            System.out.println(messagesBundle.getString("game.think"));
+                                            System.out.println(messagesBundle.getString("game.enter"));
+                                        }},
+                                        {"game.win", messagesBundle.getString("game.win")},
+                                        {"game.giveUp", messagesBundle.getString("game.giveUp")},
+                                        {"game.isCorrect", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("game.isCorrect"), a.getName())},
+                                        {"game.learned", messagesBundle.getString("game.learned")},
+                                        {"game.distinguish", messagesBundle.getString("game.distinguish")},
+                                        {"game.again", messagesBundle.getString("game.again").split("\\f")},
+                                        {"menu.property.title", messagesBundle.getString("menu.property.title")},
+                                        {"menu.property.exit", messagesBundle.getString("menu.property.exit")},
+                                        {"menu.property.error", messagesBundle.getString("menu.property.error")},
+                                        {"menu.entry.play", messagesBundle.getString("menu.entry.play")},
+                                        {"menu.entry.list", messagesBundle.getString("menu.entry.list")},
+                                        {"menu.entry.search", messagesBundle.getString("menu.entry.search")},
+                                        {"menu.entry.statistics", messagesBundle.getString("menu.entry.statistics")},
+                                        {"menu.entry.print", messagesBundle.getString("menu.entry.print")},
+                                        {"tree.list.animals", messagesBundle.getString("tree.list.animals")},
+                                        {"tree.search.facts", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("tree.search.facts"), a.getNameWithoutArticle())},
+                                        {"tree.search.noFacts", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("tree.search.noFacts"), a.getNameWithoutArticle())},
+                                        {"tree.stats.title", messagesBundle.getString("tree.stats.title")},
+                                        {"tree.stats.root", (Function<String, String>) s -> MessageFormat.format(messagesBundle.getString("tree.stats.root"), s)},
+                                        {"tree.stats.nodes", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.nodes"), i)},
+                                        {"tree.stats.animals", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.animals"), i)},
+                                        {"tree.stats.statements", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.statements"), i)},
+                                        {"tree.stats.height", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.height"), i)},
+                                        {"tree.stats.minimum", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.minimum"), i)},
+                                        {"tree.stats.average", (Function<Double, String>) d -> MessageFormat.format(messagesBundle.getString("tree.stats.average"), d)}
+                                }
+                        );
+                    }
+
+                    private List<Object[]> patternList() {
+                        return patternsBundle.keySet().stream()
+                                .map(s -> new Object[]{s, patternsBundle.getString(s)})
+                                .collect(Collectors.toList());
+                    }
+
+                    @Override
+                    protected Object[][] getContents() {
+                        return Stream.of(messagesList(), patternList())
+                                .flatMap(l -> l.stream())
+                                .collect(Collectors.toList())
+                                .toArray(new Object[][]{});
+                    }
+                };
+            else if (messagesBundle.getString("fileName").equalsIgnoreCase("animals_eo."))
+                return new ListResourceBundle() {
+                    private List<Object[]> messagesList() {
+                        return Arrays.asList(
+                                new Object[][]{
+                                        {"fileName", messagesBundle.getString("fileName")},
+                                        {"welcome", messagesBundle.getString("welcome")},
+                                        {"greeting.morning", messagesBundle.getString("greeting.morning")},
+                                        {"greeting.afternoon", messagesBundle.getString("greeting.afternoon")},
+                                        {"greeting.evening", messagesBundle.getString("greeting.evening")},
+                                        {"farewell", messagesBundle.getString("farewell").split("\\f")},
+                                        {"ask.again", messagesBundle.getString("ask.again").split("\\f")},
+                                        {"animal.wantLearn", messagesBundle.getString("animal.wantLearn")},
+                                        {"animal.askFavorite", messagesBundle.getString("animal.askFavorite")},
+                                        {"animal.nice", messagesBundle.getString("animal.nice").split("\\f")},
+                                        {"animal.prompt", messagesBundle.getString("animal.prompt")},
+                                        {"animal.error", messagesBundle.getString("animal.error")},
+                                        {"statement.prompt", (BiFunction<Animal, Animal, String>) (a1, a2) -> MessageFormat.format(messagesBundle.getString("statement.prompt"),
+                                                a1.getName(),
+                                                a2.getName())},
+                                        {"statement.error", messagesBundle.getString("statement.error")},
+                                        {"game.entry", (Runnable) () -> {
+                                            System.out.println(messagesBundle.getString("game.letsPlay"));
+                                            System.out.println(messagesBundle.getString("game.think"));
+                                            System.out.println(messagesBundle.getString("game.enter"));
+                                            System.out.println();
+                                        }},
+                                        {"game.win", messagesBundle.getString("game.win")},
+                                        {"game.giveUp", messagesBundle.getString("game.giveUp")},
+                                        {"game.isCorrect", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("game.isCorrect"), a.getName())},
+                                        {"game.learned", messagesBundle.getString("game.learned")},
+                                        {"game.distinguish", messagesBundle.getString("game.distinguish")},
+                                        {"game.again", messagesBundle.getString("game.again").split("\\f")},
+                                        {"menu.property.title", messagesBundle.getString("menu.property.title")},
+                                        {"menu.property.exit", messagesBundle.getString("menu.property.exit")},
+                                        {"menu.property.error", messagesBundle.getString("menu.property.error")},
+                                        {"menu.entry.play", messagesBundle.getString("menu.entry.play")},
+                                        {"menu.entry.list", messagesBundle.getString("menu.entry.list")},
+                                        {"menu.entry.search", messagesBundle.getString("menu.entry.search")},
+                                        {"menu.entry.statistics", messagesBundle.getString("menu.entry.statistics")},
+                                        {"menu.entry.print", messagesBundle.getString("menu.entry.print")},
+                                        {"tree.list.animals", messagesBundle.getString("tree.list.animals")},
+                                        {"tree.search.facts", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("tree.search.facts"), a.getName())},
+                                        {"tree.search.noFacts", (Function<Animal, String>) a -> MessageFormat.format(messagesBundle.getString("tree.search.noFacts"), a.getName())},
+                                        {"tree.stats.title", messagesBundle.getString("tree.stats.title")},
+                                        {"tree.stats.root", (Function<String, String>) s -> MessageFormat.format(messagesBundle.getString("tree.stats.root"), s)},
+                                        {"tree.stats.nodes", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.nodes"), i)},
+                                        {"tree.stats.animals", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.animals"), i)},
+                                        {"tree.stats.statements", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.statements"), i)},
+                                        {"tree.stats.height", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.height"), i)},
+                                        {"tree.stats.minimum", (Function<Integer, String>) i -> MessageFormat.format(messagesBundle.getString("tree.stats.minimum"), i)},
+                                        {"tree.stats.average", (Function<Double, String>) d -> MessageFormat.format(messagesBundle.getString("tree.stats.average"), d)}
+                                }
+                        );
+                    }
+
+                    private List<Object[]> patternList() {
+                        return patternsBundle.keySet().stream()
+                                .map(s -> new Object[]{s, patternsBundle.getString(s)})
+                                .collect(Collectors.toList());
+                    }
+
+                    @Override
+                    protected Object[][] getContents() {
+                        return Stream.of(messagesList(), patternList())
+                                .flatMap(l -> l.stream())
+                                .collect(Collectors.toList())
+                                .toArray(new Object[][]{});
+                    }
+                };
+            else
+                throw new IllegalStateException("Program cannot be invoked unless in en or eo locale");
+        }
     }
 }

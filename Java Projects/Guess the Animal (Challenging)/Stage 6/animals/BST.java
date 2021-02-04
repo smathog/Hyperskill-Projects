@@ -155,18 +155,17 @@ public class BST {
     }
 
     public void saveTree(String fileName, FileType fileType) {
-        Main.Wrapper w = Main.Wrapper.getInstance();
         try {
             ObjectMapper objectMapper = getObjectMapperForType(fileType);
             objectMapper
                     .writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(w.appResource.getString("fileName")), root);
+                    .writeValue(new File(fileName), root);
             objectMapper
                     .writerWithDefaultPrettyPrinter()
-                    .writeValue(new File("list" + w.appResource.getString("fileName")), animalSet.toArray(new Animal[]{}));
+                    .writeValue(new File("list" + fileName), animalSet.toArray(new Animal[]{}));
             //System.out.println("Saved to: " + fileName);
         } catch (Exception e) {
-            System.out.println("ERROR WRITING BST TO JSON WITH FILENAME " + w.appResource.getString("fileName"));
+            System.out.println("ERROR WRITING BST TO JSON WITH FILENAME " + fileName);
             System.out.println(e.getMessage());
         }
     }
