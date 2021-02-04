@@ -7,11 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LanguageRules {
-    private static ResourceBundle appResource = Main.getAppResource();
-
     public static Optional<Boolean> validateAnswer(String answer) {
-        Pattern positive = Pattern.compile(appResource.getString("positiveAnswer.isCorrect"), Pattern.CASE_INSENSITIVE);
-        Pattern negative = Pattern.compile(appResource.getString("negativeAnswer.isCorrect"), Pattern.CASE_INSENSITIVE);
+        Main.Wrapper w = Main.Wrapper.getInstance();
+        Pattern positive = Pattern.compile(w.appResource.getString("positiveAnswer.isCorrect"), Pattern.CASE_INSENSITIVE);
+        Pattern negative = Pattern.compile(w.appResource.getString("negativeAnswer.isCorrect"), Pattern.CASE_INSENSITIVE);
         Matcher mPositive = positive.matcher(answer);
         Matcher mNegative = negative.matcher(answer);
         boolean p = mPositive.matches();
@@ -25,25 +24,26 @@ public class LanguageRules {
     }
 
     public static Animal getAnimal(Scanner scanner) {
+        Main.Wrapper w = Main.Wrapper.getInstance();
         String input = scanner.nextLine();
-        Matcher isCorrect = Pattern.compile(appResource.getString("animal.isCorrect"), Pattern.CASE_INSENSITIVE).matcher(input);
+        Matcher isCorrect = Pattern.compile(w.appResource.getString("animal.isCorrect"), Pattern.CASE_INSENSITIVE).matcher(input);
         if (isCorrect.matches()) {
-            String p1 = appResource.getString("animal.1.pattern");
-            String p2 = appResource.getString("animal.2.pattern");
-            String p3 = appResource.getString("animal.3.pattern");
+            String p1 = w.appResource.getString("animal.1.pattern");
+            String p2 = w.appResource.getString("animal.2.pattern");
+            String p3 = w.appResource.getString("animal.3.pattern");
             Matcher m1 = Pattern.compile(p1, Pattern.CASE_INSENSITIVE).matcher(input);
             Matcher m2 = Pattern.compile(p2, Pattern.CASE_INSENSITIVE).matcher(input);
             Matcher m3 = Pattern.compile(p3, Pattern.CASE_INSENSITIVE).matcher(input);
             if (m1.matches())
-                return new Animal(input.replaceAll("(?i)" + p1, appResource.getString("animal.1.replace")));
+                return new Animal(input.replaceAll("(?i)" + p1, w.appResource.getString("animal.1.replace")));
             else if (m2.matches())
-                return new Animal(input.replaceAll("(?i)" + p2, appResource.getString("animal.2.replace")));
+                return new Animal(input.replaceAll("(?i)" + p2, w.appResource.getString("animal.2.replace")));
             else if (m3.matches())
-                return new Animal(input.replaceAll("(?i)" + p3, appResource.getString("animal.3.replace")));
+                return new Animal(input.replaceAll("(?i)" + p3, w.appResource.getString("animal.3.replace")));
             else
                 throw new IllegalArgumentException("Debug statement - shouldn't happen");
         } else {
-            System.out.println(appResource.getString("animal.error"));
+            System.out.println(w.appResource.getString("animal.error"));
             return getAnimal(scanner);
         }
     }

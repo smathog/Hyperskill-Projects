@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 public class Animal {
     private String name;
 
-    private static ResourceBundle appResource = Main.getAppResource();
-
     public Animal() {}
 
     public Animal(String name) {
@@ -28,7 +26,8 @@ public class Animal {
 
     @JsonIgnore
     public String getNameWithoutArticle() {
-        return name.replaceAll(appResource.getString("animalName.1.pattern"), appResource.getString("animalName.1.replace"));
+        Main.Wrapper w = Main.Wrapper.getInstance();
+        return name.replaceAll(w.appResource.getString("animalName.1.pattern"), w.appResource.getString("animalName.1.replace"));
     }
 
     @Override

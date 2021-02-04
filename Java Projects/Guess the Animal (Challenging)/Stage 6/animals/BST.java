@@ -15,7 +15,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BST {
-    private static final ResourceBundle appResource = Main.getAppResource();
     private static final Comparator<Animal> animalComparator = Comparator.comparing(Animal::getName);
 
     private Node root;
@@ -38,20 +37,21 @@ public class BST {
     }
 
     public void getStats() {
-        System.out.println(appResource.getString("tree.stats.title"));
+        Main.Wrapper w = Main.Wrapper.getInstance();
+        System.out.println(w.appResource.getString("tree.stats.title"));
         System.out.println();
-        var rootFunction = (Function<String, String>) appResource.getObject("tree.stats.root");
+        var rootFunction = (Function<String, String>) w.appResource.getObject("tree.stats.root");
         if (root.isAnimal())
             System.out.println(rootFunction.apply(((AnimalNode) root).getValue().getName()));
         else
             System.out.println(rootFunction.apply(((QuestionNode) root).getPositiveStatement()));
         int numNodes = getNumNodes(root);
-        System.out.println(((Function<Integer, String>) appResource.getObject("tree.stats.nodes")).apply(numNodes));
-        System.out.println(((Function<Integer, String>) appResource.getObject("tree.stats.animals")).apply(animalSet.size()));
-        System.out.println(((Function<Integer, String>) appResource.getObject("tree.stats.statements")).apply(numNodes - animalSet.size()));
-        System.out.println(((Function<Integer, String>) appResource.getObject("tree.stats.height")).apply(getMaxDepth(root) - 1));
-        System.out.println(((Function<Integer, String>) appResource.getObject("tree.stats.minimum")).apply(getMinDepth(root) - 1));
-        System.out.println(((Function<Double, String>) appResource.getObject("tree.stats.average")).apply(getAverageDepth(root)));
+        System.out.println(((Function<Integer, String>) w.appResource.getObject("tree.stats.nodes")).apply(numNodes));
+        System.out.println(((Function<Integer, String>) w.appResource.getObject("tree.stats.animals")).apply(animalSet.size()));
+        System.out.println(((Function<Integer, String>) w.appResource.getObject("tree.stats.statements")).apply(numNodes - animalSet.size()));
+        System.out.println(((Function<Integer, String>) w.appResource.getObject("tree.stats.height")).apply(getMaxDepth(root) - 1));
+        System.out.println(((Function<Integer, String>) w.appResource.getObject("tree.stats.minimum")).apply(getMinDepth(root) - 1));
+        System.out.println(((Function<Double, String>) w.appResource.getObject("tree.stats.average")).apply(getAverageDepth(root)));
     }
 
     private int getNumNodes(Node start) {
@@ -155,17 +155,18 @@ public class BST {
     }
 
     public void saveTree(String fileName, FileType fileType) {
+        Main.Wrapper w = Main.Wrapper.getInstance();
         try {
             ObjectMapper objectMapper = getObjectMapperForType(fileType);
             objectMapper
                     .writerWithDefaultPrettyPrinter()
-                    .writeValue(new File(fileName), root);
+                    .writeValue(new File(w.appResource.getString("fileName")), root);
             objectMapper
                     .writerWithDefaultPrettyPrinter()
-                    .writeValue(new File("list" + fileName), animalSet.toArray(new Animal[]{}));
-            System.out.println("Saved to: " + fileName);
+                    .writeValue(new File("list" + w.appResource.getString("fileName")), animalSet.toArray(new Animal[]{}));
+            //System.out.println("Saved to: " + fileName);
         } catch (Exception e) {
-            System.out.println("ERROR WRITING BST TO JSON WITH FILENAME " + fileName);
+            System.out.println("ERROR WRITING BST TO JSON WITH FILENAME " + w.appResource.getString("fileName"));
             System.out.println(e.getMessage());
         }
     }
