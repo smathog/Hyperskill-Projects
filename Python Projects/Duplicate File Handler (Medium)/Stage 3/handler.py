@@ -102,13 +102,10 @@ def check_for_hash() -> bool:
     return choice == "yes"
 
 
-def hash_files(file_tuple_list: List[Tuple[List[str], int]]) -> \
-        List[Tuple[List[Tuple[List[Tuple[int, str]], str]], int]]:
-    count: int = 1
-    copies_list: List[Tuple[List[Tuple[List[Tuple[int, str]], str]], int]] = list()
+def hash_files(file_tuple_list: List[Tuple[List[str], int]]) -> List[str]:
+    copies_list: List[str] = list()
     for (file_list, size) in file_tuple_list:
         print(f"{size} bytes")
-        byte_list: List[Tuple[List[Tuple[int, str]], str]] = list()
         hash_dict: Dict[str, List[str]] = dict()
         for file in file_list:
             with open(file, "rb") as reader:
@@ -119,15 +116,10 @@ def hash_files(file_tuple_list: List[Tuple[List[str], int]]) -> \
         for (hash_val, list_of_files) in hash_dict.items():
             if len(list_of_files) >= 2:
                 print(f"Hash: {hash_val}")
-                hash_tuple: Tuple[List[Tuple[int, str]], str] = (list(), hash_val)
                 for file in list_of_files:
-                    print(f"{count}. {file}")
-                    hash_tuple[0].append((count, file))
-                    count += 1
+                    copies_list.append(file)
+                    print(f"{len(copies_list)}. {file}")
                 print()
-                byte_list.append(hash_tuple)
-        if byte_list:
-            copies_list.append((byte_list, size))
     return copies_list
 
 
