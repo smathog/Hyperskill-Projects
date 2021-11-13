@@ -1,0 +1,3 @@
+## Stage Specification
+
+The stage specification can be found [here](https://hyperskill.org/projects/147/stages/793/implement) on Hyperskill.
